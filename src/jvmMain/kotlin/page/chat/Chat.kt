@@ -12,7 +12,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.mikepenz.markdown.Markdown
 import config.LocalAppConfig
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
