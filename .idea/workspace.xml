@@ -104,7 +104,7 @@
       <recent name="D:\MyAndroidProject\ChatPTQ\src\jvmMain\kotlin\repository\service" />
     </key>
   </component>
-  <component name="RunManager" selected="Kotlin.MainKt">
+  <component name="RunManager" selected="Gradle.ChatPTQ [createDistributable]">
     <configuration name="ChatPTQ [createDistributable]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -202,8 +202,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Kotlin.MainKt" />
         <item itemvalue="Gradle.ChatPTQ [createDistributable]" />
+        <item itemvalue="Kotlin.MainKt" />
         <item itemvalue="Gradle.ChatPTQ [createReleaseDistributable]" />
         <item itemvalue="Gradle.ChatPTQ [packageExe]" />
         <item itemvalue="Gradle.ChatPTQ [packageReleaseExe]" />
