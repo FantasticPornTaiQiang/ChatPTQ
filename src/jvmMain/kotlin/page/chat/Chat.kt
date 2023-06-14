@@ -25,7 +25,7 @@ import view.Loading
 import view.LocalAppToaster
 import java.awt.event.KeyEvent
 
-const val sendFastKeyDuration = 500L
+const val sendFastKeyDuration = 350L
 
 @Composable
 fun ChatPage() {
@@ -34,6 +34,7 @@ fun ChatPage() {
     var inputEnabled by remember { mutableStateOf(true) }
     var isSending by remember { mutableStateOf(false) }
     var input by remember { mutableStateOf("") }
+    var inputCopy by remember { mutableStateOf("") }
 
     val scrollState = rememberLazyListState()
 
@@ -60,8 +61,8 @@ fun ChatPage() {
     }
 
     val sendChat = sendChat@{
-        if (input.trim() == "") {
-            toaster.toastFailure("不能发送空消息")
+        if (input.isBlank()) {
+            toaster.toastFailure("请输入内容")
             return@sendChat
         }
 
@@ -143,7 +144,7 @@ fun ChatPage() {
             OutlinedTextField(
                 input,
                 modifier = Modifier
-                    .weight(10f)
+                    .weight(1f)
                     .onPreviewKeyEvent {
                         if (it.key == Key(KeyEvent.VK_ENTER)) {
                             return@onPreviewKeyEvent if (it.type == KeyEventType.KeyDown) {
@@ -153,6 +154,7 @@ fun ChatPage() {
                                 } else {
                                     if (System.currentTimeMillis() - sendFastKeyDownTime > sendFastKeyDuration) {
                                         sendFastKeyDownTime = 0L
+                                        input = inputCopy
                                         sendChat()
                                         true
                                     } else {
@@ -173,17 +175,36 @@ fun ChatPage() {
                 },
                 onValueChange = {
                     if (!inputEnabled || isSending) return@OutlinedTextField
+                    inputCopy = input
                     input = it
                 },
                 leadingIcon= if (isSending) {
                     { Loading() }
                 } else null
             )
-            IconButton(modifier = Modifier.weight(1f), iconPath = "icon_send.png") {
-                sendChat()
-            }
-            IconButton(modifier = Modifier.weight(1f), iconPath = "icon_delete.png") {
-                conversations.clear()
+            Box(modifier = Modifier.size(80.dp)) {
+                IconButton(modifier = Modifier.align(Alignment.TopStart), iconPath = "icon_send.png") {
+                    sendChat()
+                }
+                IconButton(modifier = Modifier.align(Alignment.TopEnd), iconPath = "icon_delete.png") {
+                    conversations.clear()
+                }
+                IconButton(modifier = Modifier.align(Alignment.BottomStart), iconPath = "icon_translate.png") {
+                    if (input.isBlank()) {
+                        toaster.toastFailure("请输入翻译内容")
+                        return@IconButton
+                    }
+                    input = "翻译成中文:\n$input"
+                    sendChat()
+                }
+                IconButton(modifier = Modifier.align(Alignment.BottomEnd), iconPath = "icon_translate_to_eng.png") {
+                    if (input.isBlank()) {
+                        toaster.toastFailure("请输入翻译内容")
+                        return@IconButton
+                    }
+                    input = "Translate the following into English please:\n$input"
+                    sendChat()
+                }
             }
         }
     }

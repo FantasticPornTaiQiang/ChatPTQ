@@ -15,7 +15,8 @@ data class UserProxy(val hostname: String, val port: Int)
 
 interface ApiService
 
-const val baseUrl = "https://api.openai.com/"
+private const val baseUrl = "https://api.openai.com/"
+private const val debug = false
 
 class RetrofitService {
     private var userProxy = AppConfig().userProxy
@@ -55,7 +56,9 @@ class RetrofitService {
             .addInterceptor { chain ->
                 chain.request().newBuilder().build().let {
                     chain.proceed(it).also { res ->
-                        println("request:${res.request().url()}\ncode: ${res.code()}\nmessage:${res.message()}\nbody:\n${res.peekBody(1024 * 1024).string()}")
+                        if (debug) {
+                            println("request:${res.request().url()}\ncode: ${res.code()}\nmessage:${res.message()}\nbody:\n${res.peekBody(1024 * 1024).string()}")
+                        }
                     }
                 }
             }
