@@ -11,7 +11,7 @@
 
 * Windows应用，无需安装，解压开箱即用
 * 使用前先在Setting里配置
-* 如果有新版本，需要覆盖老版本，把原来文件夹里的appConfig.json和app_data.preferences_pb扔进新版本文件夹里就行（已存在则直接覆盖）
+* 如果有新版本需要更新，则把原来文件夹里的appConfig.json和app_data.preferences_pb扔进新版本文件夹里就行（已存在则直接覆盖）
 * 仅为个人私用，安全、高效、方便
 * ~~MacOS我没有试过，我没有Mac，想用的话可以自己拉项目打包mac版的试试~~
 
