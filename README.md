@@ -1,4 +1,4 @@
-# ChatPTQ
+# ChatPTQ V1.1.0
  - A (Windows) desktop ChatGPT app for personal quick use
  - Compose Desktop App
  - [个人主页](https://juejin.cn/user/800859313671719)
@@ -23,6 +23,8 @@
   * 暂不支持自动系统代理，只能手动填入系统代理，具体在`设置-网络和Internet-代理-手动设置代理`中可以找到ip和端口
 * 请求设置：
   * 自行填入ApiKey
+  * 余量查询：点击可查询总额度、使用量（只能查询最近100天）、过期时间
+    * 请不要频繁查询
 * 开机启动
   * 暂不支持
 
@@ -34,7 +36,13 @@
   * 快捷发送：长按Enter0.5秒
 * 清屏：垃圾桶图标
   * 请注意聊天长度，上下文记忆需要回传所有历史聊天消息，因此发的请求越多token花费越多，请自行把控token的消耗，程序并未设限
-
+* 快捷翻译：
+  * 文A图标：中译英
+  * G文图标：英译中
+* token消耗：
+  * 名字后面的tks是tokens的缩写，代表token消耗情况
+  * GPT回复的token消耗仅为本条回复的消耗
+  * “我”发送的token消耗为我本次发送的内容蕴含的消耗，即包括了上下文的消耗
 
 ## Project
 

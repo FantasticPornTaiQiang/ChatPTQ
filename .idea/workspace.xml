@@ -5,16 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="41f80b63-457e-4311-97d8-94820b32695b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/jvmMain/kotlin/page/setting/Data.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/jvmMain/kotlin/repository/api/AccountService.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/jvmMain/kotlin/util/Time.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/jvmMain/resources/icon_translate.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/jvmMain/resources/icon_translate_to_eng.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jvmMain/kotlin/page/chat/Chat.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/jvmMain/kotlin/page/chat/Chat.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jvmMain/kotlin/page/chat/Data.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/jvmMain/kotlin/page/chat/Data.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jvmMain/kotlin/page/setting/Setting.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/jvmMain/kotlin/page/setting/Setting.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jvmMain/kotlin/repository/service/RetrofitService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/jvmMain/kotlin/repository/service/RetrofitService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/launcher/chat.png" beforeDir="false" afterPath="$PROJECT_DIR$/launcher/chat.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
