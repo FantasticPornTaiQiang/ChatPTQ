@@ -5,13 +5,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import config.LocalAppConfig
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -29,7 +29,7 @@ const val sendFastKeyDuration = 500L
 
 @Composable
 fun ChatPage() {
-    val conversations = rememberSaveable { mutableStateListOf<Conversation>() }
+    val conversations = remember { mutableStateListOf<Conversation>() }
 
     var inputEnabled by remember { mutableStateOf(true) }
     var isSending by remember { mutableStateOf(false) }
@@ -77,7 +77,9 @@ fun ChatPage() {
 
             request<ChatCompletionService> {
                 val res = chat(ChatRequest(messages = conversations.filter { it.success }.map { it.message }))
-                conversations += Conversation(res.choices[0].message)
+                val last = conversations.removeLast()
+                conversations += last.copy(tokenUsage = res.usage.prompt_tokens)
+                conversations += Conversation(res.choices[0].message, res.usage.completion_tokens)
             }.failure {
                 val last = conversations.removeLast()
                 conversations += last.copy(success = false)
@@ -92,15 +94,16 @@ fun ChatPage() {
     Column(modifier = Modifier.fillMaxSize()) {
         LazyColumn(state = scrollState, modifier = Modifier.fillMaxWidth().weight(6f)) {
             val size = conversations.size
-            items(size) {
-                val message = conversations[it].message
-                val success = conversations[it].success
+            items(size) { conversationIndex ->
+                val conversation = conversations[conversationIndex]
+                val message = conversation.message
+                val success = conversation.success
                 Column(modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)) {
                     OutlinedTextField(
                         message.content,
                         onValueChange = {},
                         label = {
-                            Text(if (message.role == "assistant") config.gptName else "我",
+                            Text((if (message.role == "assistant") config.gptName else "我") + if (conversation.tokenUsage == null) "" else " (${conversation.tokenUsage}tks)",
                                 modifier = Modifier
                                     .align(if (message.role == "assistant") Alignment.Start else Alignment.End)
                             )
@@ -108,9 +111,21 @@ fun ChatPage() {
                         modifier = Modifier.align(if (message.role == "assistant") Alignment.Start else Alignment.End),
                         isError = !success
                     )
-//                    Markdown(message.content, modifier = Modifier.align(Alignment.Start))
                     Row(modifier = Modifier.align(Alignment.End), verticalAlignment = Alignment.CenterVertically) {
-                        Text("${it + 1}/$size")
+                        Text("${conversationIndex + 1}/$size", fontSize = 14.sp, color = Color.Gray)
+
+                        Spacer(modifier = Modifier.width(5.dp))
+
+                        IconButton(iconPath = "icon_translate_to_eng.png") {
+                            input = "Translate the following into English please:\n${message.content}"
+                            sendChat()
+                        }
+
+                        IconButton(iconPath = "icon_translate.png") {
+                            input = "Translate the following into Chinese please:\n${message.content}"
+                            sendChat()
+                        }
+
                         IconButton(iconPath = "icon_copy.png") {
                             copyToClipboard(message.content)
                         }
@@ -178,7 +193,7 @@ fun ChatPage() {
 fun IconButton(modifier: Modifier = Modifier, iconPath: String, onClick: () -> Unit) {
     TextButton(
         onClick = onClick,
-        modifier = modifier) {
-        Icon(painterResource(iconPath), null, modifier = Modifier.size(20.dp))
+        modifier = modifier.size(40.dp)) {
+        Icon(painterResource(iconPath), null, modifier = Modifier.size(18.dp))
     }
 }

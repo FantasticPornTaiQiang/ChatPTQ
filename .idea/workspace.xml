@@ -5,7 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="41f80b63-457e-4311-97d8-94820b32695b" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/jvmMain/kotlin/page/setting/Data.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/jvmMain/kotlin/repository/api/AccountService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/jvmMain/kotlin/util/Time.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/jvmMain/resources/icon_translate.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/jvmMain/resources/icon_translate_to_eng.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jvmMain/kotlin/page/chat/Chat.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/jvmMain/kotlin/page/chat/Chat.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jvmMain/kotlin/page/chat/Data.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/jvmMain/kotlin/page/chat/Data.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jvmMain/kotlin/page/setting/Setting.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/jvmMain/kotlin/page/setting/Setting.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jvmMain/kotlin/repository/service/RetrofitService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/jvmMain/kotlin/repository/service/RetrofitService.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,7 +104,7 @@
       <recent name="D:\MyAndroidProject\ChatPTQ\src\jvmMain\kotlin\repository\service" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.ChatPTQ [createDistributable]">
+  <component name="RunManager" selected="Kotlin.MainKt">
     <configuration name="ChatPTQ [createDistributable]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -193,8 +202,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.ChatPTQ [createDistributable]" />
         <item itemvalue="Kotlin.MainKt" />
+        <item itemvalue="Gradle.ChatPTQ [createDistributable]" />
         <item itemvalue="Gradle.ChatPTQ [createReleaseDistributable]" />
         <item itemvalue="Gradle.ChatPTQ [packageExe]" />
         <item itemvalue="Gradle.ChatPTQ [packageReleaseExe]" />

@@ -6,12 +6,13 @@ data class Session(
 
 data class ChatRequest(
     val messages: List<Message>,
-    val model: String = /*"gpt-3.5-turbo"*/ "gpt-3.5-turbo"
+    val model: String = "gpt-3.5-turbo"
 )
 
 data class Conversation(
     val message: Message,
-    val success: Boolean = true
+    val tokenUsage: Int? = null,
+    val success: Boolean = true,
 )
 
 data class Message(
@@ -27,13 +28,13 @@ data class ChatResult(
 )
 
 data class Choice(
-    val finishReason: String,
+    val finish_reason: String,
     val index: Int,
     val message: Message
 )
 
 data class Usage(
-    val completionTokens: Int,
-    val promptTokens: Int,
-    val totalTokens: Int
+    val completion_tokens: Int,
+    val prompt_tokens: Int,
+    val total_tokens: Int
 )

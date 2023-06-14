@@ -52,6 +52,13 @@ class RetrofitService {
                         chain.proceed(it)
                     }
             }
+            .addInterceptor { chain ->
+                chain.request().newBuilder().build().let {
+                    chain.proceed(it).also { res ->
+                        println("request:${res.request().url()}\ncode: ${res.code()}\nmessage:${res.message()}\nbody:\n${res.peekBody(1024 * 1024).string()}")
+                    }
+                }
+            }
             .proxy(Proxy(Proxy.Type.HTTP, InetSocketAddress(userProxy.hostname, userProxy.port)))
             .build()
     }
