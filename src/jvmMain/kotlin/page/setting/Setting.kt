@@ -1,31 +1,32 @@
 package page.setting
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.WindowPlacement
-import config.AppConfig
-import config.LocalAppConfig
-import config.OnConfigChange
+import config.*
 import kotlinx.coroutines.launch
 import repository.api.AccountService
 import repository.service.request
 import util.parseDateFromUnixTime
 import view.Loading
 import view.LocalAppToaster
-import java.lang.module.ModuleFinder
-import java.util.Date
 
 
 @Composable
@@ -200,6 +201,8 @@ fun ApiKey(appConfig: AppConfig, onChange: OnConfigChange) {
 
 @Composable
 fun System(appConfig: AppConfig, onChange: OnConfigChange) {
+    val toaster = LocalAppToaster.current
+
     SettingPanel("应用设置") {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().clickable {
             onChange(appConfig.copy(autoStart = !appConfig.autoStart))
@@ -209,6 +212,8 @@ fun System(appConfig: AppConfig, onChange: OnConfigChange) {
             })
             Text("开机启动", modifier = Modifier.padding(start = 5.dp))
         }
+
+        Divider(modifier = Modifier.fillMaxWidth().padding(2.dp), thickness = 1.dp, color = Color.LightGray)
 
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().clickable {
             onChange(appConfig.copy(windowPlacement = if (appConfig.windowPlacement == WindowPlacement.Maximized.name) WindowPlacement.Floating.name else WindowPlacement.Maximized.name))
@@ -220,6 +225,57 @@ fun System(appConfig: AppConfig, onChange: OnConfigChange) {
                     onChange(appConfig.copy(windowPlacement = if (it) WindowPlacement.Maximized.name else WindowPlacement.Floating.name))
                 })
             Text("全屏模式", modifier = Modifier.padding(start = 5.dp))
+        }
+
+        Divider(modifier = Modifier.fillMaxWidth().padding(2.dp), thickness = 0.6.dp, color = Color.LightGray)
+
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start) {
+            Text("快捷发送", modifier = Modifier.padding(end = 5.dp))
+
+            Column {
+                FastSendMode.values().map { it.name }.forEach {
+                    val fastSendMode = FastSendMode.valueOf(it)
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.selectable(
+                            selected = appConfig.fastSendMode == it,
+                            onClick = { onChange(appConfig.copy(fastSendMode = it)) },
+                            role = Role.RadioButton
+                        ).padding(8.dp)
+                    ) {
+                        RadioButton(
+                            selected = appConfig.fastSendMode == it,
+                            onClick = null
+                        )
+                        if (fastSendMode == FastSendMode.LongPressEnter) {
+                            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                                val tint = fastSendMode.ChineseName.split("{duration}")
+                                Text(tint[0])
+                                Box(modifier = Modifier.padding(horizontal = 4.dp).clip(RoundedCornerShape(CornerSize(2.dp))).border(width = 1.dp, color = Color.LightGray).padding(horizontal = 8.dp, vertical = 6.dp)) {
+                                    BasicTextField(
+                                        appConfig.fastSendLongPressDuration.toString(),
+                                        onValueChange = { value ->
+                                            value.trim().toLongOrNull()?.run {
+                                                if (this <= 0L) null else this
+                                            } ?: run {
+                                                toaster.toastFailure("请输入大于0的整数")
+                                                return@BasicTextField
+                                            }
+                                            onChange(appConfig.copy(fastSendLongPressDuration = value.toLong()))
+                                        },
+                                        singleLine = true,
+                                        modifier = Modifier.width(40.dp)
+                                    )
+                                }
+                                Text(tint[1])
+                            }
+                        } else {
+                            Text(text = fastSendMode.ChineseName, modifier = Modifier.fillMaxWidth())
+                        }
+                    }
+                }
+            }
         }
     }
 }

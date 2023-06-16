@@ -1,7 +1,6 @@
 package config
 
 import androidx.compose.runtime.*
-import androidx.compose.ui.res.useResource
 import androidx.compose.ui.window.WindowPlacement
 import com.google.gson.Gson
 import com.google.gson.stream.JsonReader
@@ -11,7 +10,6 @@ import repository.service.retrofitService
 import view.LocalAppToaster
 import java.io.File
 import java.io.FileInputStream
-import java.io.FileNotFoundException
 import java.io.FileWriter
 import java.io.InputStreamReader
 
@@ -21,7 +19,9 @@ data class AppConfig(
     val apiKey: String = "",
     val autoStart: Boolean = false,
     val gptName: String = "小彭",
-    val windowPlacement: String = WindowPlacement.Floating.name
+    val windowPlacement: String = WindowPlacement.Floating.name,
+    val fastSendMode: String = FastSendMode.LongPressEnter.name,
+    val fastSendLongPressDuration: Long = 300L,
 )
 
 typealias OnConfigChange = (AppConfig) -> Unit
@@ -176,3 +176,15 @@ private fun useSystemProxy(): UserProxy? {
 //    println(System.getProperty("http.proxyHost", "NONE"))
     return null
 }
+
+enum class FastSendMode {
+    LongPressEnter, ShiftEnter, ControlEnter, None
+}
+
+val FastSendMode.ChineseName: String
+    get() = when(this) {
+        FastSendMode.LongPressEnter -> "长按Enter{duration}毫秒发送//Enter换行"
+        FastSendMode.ShiftEnter -> "Enter发送//Shift+Enter换行（暂不支持）"
+        FastSendMode.ControlEnter -> "Enter发送//Control+Enter换行（暂不支持）"
+        FastSendMode.None -> "无快捷键"
+    }

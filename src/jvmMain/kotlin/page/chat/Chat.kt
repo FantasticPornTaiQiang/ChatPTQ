@@ -3,6 +3,7 @@ package page.chat
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -12,6 +13,7 @@ import androidx.compose.ui.input.key.*
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import config.FastSendMode
 import config.LocalAppConfig
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -24,8 +26,6 @@ import util.copyToClipboard
 import view.Loading
 import view.LocalAppToaster
 import java.awt.event.KeyEvent
-
-const val sendFastKeyDuration = 350L
 
 @Composable
 fun ChatPage() {
@@ -146,29 +146,55 @@ fun ChatPage() {
                 modifier = Modifier
                     .weight(1f)
                     .onPreviewKeyEvent {
-                        if (it.key == Key(KeyEvent.VK_ENTER)) {
-                            return@onPreviewKeyEvent if (it.type == KeyEventType.KeyDown) {
-                                if (sendFastKeyDownTime == 0L) {
-                                    sendFastKeyDownTime = System.currentTimeMillis()
-                                    false
-                                } else {
-                                    if (System.currentTimeMillis() - sendFastKeyDownTime > sendFastKeyDuration) {
+                        when(FastSendMode.valueOf(config.fastSendMode)) {
+                            FastSendMode.LongPressEnter -> {
+                                if (it.key == Key(KeyEvent.VK_ENTER)) {
+                                    return@onPreviewKeyEvent if (it.type == KeyEventType.KeyDown) {
+                                        if (sendFastKeyDownTime == 0L) {
+                                            sendFastKeyDownTime = System.currentTimeMillis()
+                                            false
+                                        } else {
+                                            if (System.currentTimeMillis() - sendFastKeyDownTime > config.fastSendLongPressDuration) {
+                                                sendFastKeyDownTime = 0L
+                                                input = inputCopy
+                                                sendChat()
+                                                true
+                                            } else {
+                                                inputEnabled = false
+                                                false
+                                            }
+                                        }
+                                    } else if (it.type == KeyEventType.KeyUp) {
                                         sendFastKeyDownTime = 0L
-                                        input = inputCopy
-                                        sendChat()
-                                        true
-                                    } else {
-                                        inputEnabled = false
+                                        inputEnabled = true
                                         false
-                                    }
+                                    } else false
                                 }
-                            } else if (it.type == KeyEventType.KeyUp) {
-                                sendFastKeyDownTime = 0L
-                                inputEnabled = true
                                 false
-                            } else false
+                            }
+//                            FastSendMode.ControlEnter -> {
+//                                if (it.key == Key(KeyEvent.VK_ENTER) && it.type == KeyEventType.KeyUp) {
+//                                    if (!it.isCtrlPressed) {
+//                                        input = inputCopy
+//                                        sendChat()
+//                                        true
+//                                    } else {
+//                                        input = inputCopy + "\n"
+//                                        false
+//                                    }
+//                                } else false
+//                            }
+//                            FastSendMode.ShiftEnter -> {
+//                                if (!it.isShiftPressed && it.key == Key(KeyEvent.VK_ENTER) && it.type == KeyEventType.KeyUp) {
+//                                    input = inputCopy
+//                                    sendChat()
+//                                    true
+//                                } else false
+//                            }
+                            else -> {
+                                false
+                            }
                         }
-                        false
                     },
                 placeholder = {
                     Text("和${config.gptName}聊天...", color = Color.LightGray)
@@ -214,7 +240,8 @@ fun ChatPage() {
 fun IconButton(modifier: Modifier = Modifier, iconPath: String, onClick: () -> Unit) {
     TextButton(
         onClick = onClick,
-        modifier = modifier.size(40.dp)) {
+        modifier = modifier.size(40.dp)
+    ) {
         Icon(painterResource(iconPath), null, modifier = Modifier.size(18.dp))
     }
 }
