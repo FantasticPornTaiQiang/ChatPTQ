@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.WindowPlacement
 import config.AppConfig
 import config.LocalAppConfig
 import config.OnConfigChange
@@ -91,20 +92,30 @@ fun Proxy(appConfig: AppConfig, onChange: OnConfigChange) {
 
         if (!enableSystemProxy) {
             Row(modifier = Modifier.padding(horizontal = 8.dp).fillMaxWidth()) {
-                OutlinedTextField(userProxy.hostname, modifier = Modifier.weight(4f), singleLine = true, onValueChange = {
-                    userProxy = userProxy.copy(hostname = it)
-                }, label = {
-                    Text("地址")
-                })
+                OutlinedTextField(
+                    userProxy.hostname,
+                    modifier = Modifier.weight(4f),
+                    singleLine = true,
+                    onValueChange = {
+                        userProxy = userProxy.copy(hostname = it)
+                    },
+                    label = {
+                        Text("地址")
+                    })
                 Spacer(modifier = Modifier.width(6.dp))
-                OutlinedTextField(userProxy.port.toString(), modifier = Modifier.weight(1f), singleLine = true, onValueChange = {
-                    if (it.contains("\\D".toRegex()) || it.trim() == "") {
-                        return@OutlinedTextField
-                    }
-                    userProxy = userProxy.copy(port = it.toInt())
-                }, label = {
-                    Text("端口")
-                })
+                OutlinedTextField(
+                    userProxy.port.toString(),
+                    modifier = Modifier.weight(1f),
+                    singleLine = true,
+                    onValueChange = {
+                        if (it.contains("\\D".toRegex()) || it.trim() == "") {
+                            return@OutlinedTextField
+                        }
+                        userProxy = userProxy.copy(port = it.toInt())
+                    },
+                    label = {
+                        Text("端口")
+                    })
             }
         }
     }
@@ -121,7 +132,8 @@ fun ApiKey(appConfig: AppConfig, onChange: OnConfigChange) {
 
     SettingPanel("请求设置") {
         Column(modifier = Modifier.fillMaxWidth()) {
-            OutlinedTextField(appConfig.apiKey,
+            OutlinedTextField(
+                appConfig.apiKey,
                 label = {
                     Text("APIKey")
                 },
@@ -131,23 +143,25 @@ fun ApiKey(appConfig: AppConfig, onChange: OnConfigChange) {
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)
             )
             Row(modifier = Modifier.padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-                OutlinedButton(onClick = {
-                    if (isLoading) return@OutlinedButton
-                    isLoading = true
-                    coroutineScope.launch {
-                        request<AccountService> {
-                            val dailyCost = dailyCost()
-                            val bill = billSubscription()
-                            total = bill.hard_limit_usd
-                            used = dailyCost.total_usage / 100
-                            expireTime = parseDateFromUnixTime(bill.access_until.toLong())
-                        }.whatEver {
-                            isLoading = false
-                        }.toastException(toaster)
-                    }
-                }, colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color.Transparent
-                )) {
+                OutlinedButton(
+                    onClick = {
+                        if (isLoading) return@OutlinedButton
+                        isLoading = true
+                        coroutineScope.launch {
+                            request<AccountService> {
+                                val dailyCost = dailyCost()
+                                val bill = billSubscription()
+                                total = bill.hard_limit_usd
+                                used = dailyCost.total_usage / 100
+                                expireTime = parseDateFromUnixTime(bill.access_until.toLong())
+                            }.whatEver {
+                                isLoading = false
+                            }.toastException(toaster)
+                        }
+                    }, colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color.Transparent
+                    )
+                ) {
                     Text("余量查询")
                 }
 
@@ -162,8 +176,10 @@ fun ApiKey(appConfig: AppConfig, onChange: OnConfigChange) {
                 }
             }
 
-            Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp).padding(bottom = 3.dp)
-                , verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp).padding(bottom = 3.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 if (total != null) {
                     Text("总额度：${total}$", fontSize = 14.sp)
                 }
@@ -184,7 +200,7 @@ fun ApiKey(appConfig: AppConfig, onChange: OnConfigChange) {
 
 @Composable
 fun System(appConfig: AppConfig, onChange: OnConfigChange) {
-    SettingPanel("系统设置") {
+    SettingPanel("应用设置") {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().clickable {
             onChange(appConfig.copy(autoStart = !appConfig.autoStart))
         }, horizontalArrangement = Arrangement.Start) {
@@ -192,6 +208,18 @@ fun System(appConfig: AppConfig, onChange: OnConfigChange) {
                 onChange(appConfig.copy(autoStart = it))
             })
             Text("开机启动", modifier = Modifier.padding(start = 5.dp))
+        }
+
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().clickable {
+            onChange(appConfig.copy(windowPlacement = if (appConfig.windowPlacement == WindowPlacement.Maximized.name) WindowPlacement.Floating.name else WindowPlacement.Maximized.name))
+        }, horizontalArrangement = Arrangement.Start) {
+            Checkbox(
+                appConfig.windowPlacement == WindowPlacement.Maximized.name,
+                modifier = Modifier.size(40.dp),
+                onCheckedChange = {
+                    onChange(appConfig.copy(windowPlacement = if (it) WindowPlacement.Maximized.name else WindowPlacement.Floating.name))
+                })
+            Text("全屏模式", modifier = Modifier.padding(start = 5.dp))
         }
     }
 }
@@ -202,7 +230,10 @@ fun SettingPanel(title: String, content: @Composable ColumnScope.() -> Unit) {
 
     Spacer(modifier = Modifier.height(8.dp))
 
-    Column(modifier = Modifier.fillMaxWidth().clip(shape = RoundedCornerShape(8.dp)).background(Color(245, 245, 245)).padding(vertical = 4.dp, horizontal = 8.dp)) {
+    Column(
+        modifier = Modifier.fillMaxWidth().clip(shape = RoundedCornerShape(8.dp)).background(Color(245, 245, 245))
+            .padding(vertical = 4.dp, horizontal = 8.dp)
+    ) {
         content()
     }
 

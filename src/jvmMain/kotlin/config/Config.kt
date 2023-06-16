@@ -2,6 +2,7 @@ package config
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.res.useResource
+import androidx.compose.ui.window.WindowPlacement
 import com.google.gson.Gson
 import com.google.gson.stream.JsonReader
 import kotlinx.coroutines.launch
@@ -19,7 +20,8 @@ data class AppConfig(
     val userProxy: UserProxy = UserProxy("0.0.0.0", 0),
     val apiKey: String = "",
     val autoStart: Boolean = false,
-    val gptName: String = "小彭"
+    val gptName: String = "小彭",
+    val windowPlacement: String = WindowPlacement.Floating.name
 )
 
 typealias OnConfigChange = (AppConfig) -> Unit
@@ -28,10 +30,14 @@ class AppConfigContext(val appConfig: AppConfig = AppConfig(), val onConfigChang
 val LocalAppConfig = compositionLocalOf { AppConfigContext { } }
 
 @Composable
-fun AppConfig(App: @Composable () -> Unit) {
+fun AppConfig(onConfigChange: OnConfigChange? = null, App: @Composable () -> Unit) {
     var appConfig by remember { mutableStateOf(AppConfig()) }
     val coroutineScope = rememberCoroutineScope()
     val toast = LocalAppToaster.current
+
+    remember(appConfig) {
+        onConfigChange?.invoke(appConfig)
+    }
 
     LaunchedEffect(Unit) {
         val jsonConfig = readConfig() ?: run {
