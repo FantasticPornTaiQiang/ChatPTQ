@@ -1,4 +1,4 @@
-# ChatPTQ V1.1.0
+# ChatPTQ V1.2.0
  - A (Windows) desktop ChatGPT app for personal quick use
  - Compose Desktop App
  - [个人主页](https://juejin.cn/user/800859313671719)
@@ -12,7 +12,7 @@
 * Windows应用，无需安装，解压开箱即用
 * 使用前先在Setting里配置
 * 如果有新版本需要更新，则把原来文件夹里的appConfig.json和app_data.preferences_pb扔进新版本文件夹里就行（已存在则直接覆盖）
-* 仅为个人私用，安全、高效、方便
+* 专为个人办公而制作，简洁、轻量、安全、高效、方便
 * ~~MacOS我没有试过，我没有Mac，想用的话可以自己拉项目打包mac版的试试~~
 
 ## Setting
@@ -35,7 +35,7 @@
 <img src="launcher/chat.png"  alt=""/>
 
 * 发送消息：发送图标
-  * 快捷发送：长按Enter0.5秒
+  * 快捷发送：长按Enter0.35秒
 * 清屏：垃圾桶图标
   * 请注意聊天长度，上下文记忆需要回传所有历史聊天消息，因此发的请求越多token花费越多，请自行把控token的消耗，程序并未设限
 * 快捷翻译：
