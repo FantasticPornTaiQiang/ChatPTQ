@@ -1,4 +1,4 @@
-# ChatPTQ V1.3.0
+# ChatPTQ V1.4.0
  - A (Windows) desktop ChatGPT app for personal quick use
  - Compose Desktop App
  - [个人主页](https://juejin.cn/user/800859313671719)
@@ -29,6 +29,7 @@
 * 应用设置：
   * 开机启动：暂不支持
   * 全屏模式：设置应用全屏状态
+  * 快捷发送：暂时只支持长按Enter发送，可以设置长按时间
 
 ## Chat
 
