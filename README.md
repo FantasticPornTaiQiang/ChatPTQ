@@ -7,7 +7,7 @@
 
 ## Usage
 
-[exe下载](launcher/ChatPTQ.rar)
+[exe下载](launcher/ChatPTQ.zip)
 
 * Windows应用，无需安装，解压开箱即用
 * 使用前先在Setting里配置
