@@ -1,7 +1,7 @@
 # ChatPTQ V1.4.0
  - A (Windows) desktop ChatGPT app for personal quick use
  - Compose Desktop App
- - [个人主页](https://juejin.cn/user/800859313671719)
+ - [介绍页](https://juejin.cn/post/7244077531607433275)
 
 ---
 
